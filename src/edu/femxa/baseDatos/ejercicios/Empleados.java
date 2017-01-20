@@ -34,17 +34,23 @@ public static void main(String[] args) {
 	DriverManager.registerDriver (new oracle.jdbc.driver.OracleDriver());
 	conn = DriverManager.getConnection ("jdbc:oracle:thin:@localhost:1521:xe", "HR", "password");
     stmt = conn.createStatement();
-	rset = stmt.executeQuery("SELECT E.FIRST_NAME, E.EMPLOYEE_ID, E.SALARY, E.DEPARTMENT_ID, D.DEPARTMENT_NAME from EMPLOYEES E, DEPARTMENTS D where E.DEPARTMENT_ID = D.DEPARTMENT_ID ORDER BY E.SALARY DESC");
+	rset = stmt.executeQuery(Consultas.CONSULTA_EMPLEADOS_SALARIO_ASC);
 	
 	ArrayList <EmpleadoSalario> listaEmpleados =null;
 	listaEmpleados = new ArrayList<EmpleadoSalario>();
-	
-	while (rset.next())
-	{ 		int nombre_id =rset.getInt("EMPLOYEE_ID");
-	 		String nombre=rset.getString ("FIRST_NAME");
-	 		int salario =rset.getInt("SALARY");
-	 		int departamentoId =rset.getInt("DEPARTMENT_ID");
-	 		String departamentoNombre =rset.getString("DEPARTMENT_NAME");
+
+		int nombre_id =0;
+		String nombre=null;
+		int salario =0;
+		int departamentoId =0;
+		String departamentoNombre =null;
+		while (rset.next())
+	{ 		 
+			nombre_id =rset.getInt("EMPLOYEE_ID");
+	 		 nombre=rset.getString ("FIRST_NAME");
+	 		 salario =rset.getInt("SALARY");
+	 		 departamentoId =rset.getInt("DEPARTMENT_ID");
+	 		 departamentoNombre =rset.getString("DEPARTMENT_NAME");
 
 	 		EmpleadoSalario empleados = new EmpleadoSalario(nombre_id, nombre, salario, departamentoId, departamentoNombre);
 

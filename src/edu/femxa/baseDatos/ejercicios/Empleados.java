@@ -44,6 +44,8 @@ public static void main(String[] args) {
 		int salario =0;
 		int departamentoId =0;
 		String departamentoNombre =null;
+		EmpleadoSalario empleados =null;
+		
 		while (rset.next())
 	{ 		 
 			nombre_id =rset.getInt("EMPLOYEE_ID");
@@ -52,7 +54,7 @@ public static void main(String[] args) {
 	 		 departamentoId =rset.getInt("DEPARTMENT_ID");
 	 		 departamentoNombre =rset.getString("DEPARTMENT_NAME");
 
-	 		EmpleadoSalario empleados = new EmpleadoSalario(nombre_id, nombre, salario, departamentoId, departamentoNombre);
+	 		 empleados = new EmpleadoSalario(nombre_id, nombre, salario, departamentoId, departamentoNombre);
 
 	 		listaEmpleados.add(empleados);
 	 		

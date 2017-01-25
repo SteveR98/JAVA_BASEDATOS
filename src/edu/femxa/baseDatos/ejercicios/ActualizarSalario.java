@@ -4,14 +4,15 @@ package edu.femxa.baseDatos.ejercicios;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Savepoint;
 import java.sql.Statement;
 
 public class ActualizarSalario {
+
 	
-		
 		public static void main(String[] args) throws Exception {
 			
-			
+			Savepoint Savepoint =null;
 			Connection conn = null;
 			ResultSet rset = null;
 			int rset2 = 0;
@@ -19,31 +20,32 @@ public class ActualizarSalario {
 			int salario1 = 0;
 			int empleado_id = 0;
 			
-			try
-			
-			
+		try
 			{
-				
 				
 				Class.forName("oracle.jdbc.driver.OracleDriver"); 
 				conn = DriverManager.getConnection ("jdbc:oracle:thin:@localhost:1521:xe", "HR", "password");
 	  	        stmt = conn.createStatement();
-	  	        rset = stmt.executeQuery("select * from EMPLOYEES where JOB_ID like 'AD%'");
-	  	        //rest = stmt.executeQuerry("select department_id from departments where department_name='administration');
+	  	        conn.setAutoCommit(false);
+
+	  	        rset = stmt.executeQuery(Consultas.CONSULTA_SELECT_EMPLEADOS);
 	  	       
-	  	        rset2 = stmt.executeUpdate("UPDATE EMPLOYEES SALARY SET SALARY=round(SALARY*0.20+ SALARY,2) WHERE JOB_ID like 'AD%'");
-	  	      
-	  	        //rset2 = stmt.executeUpdate("UPDATE EMPLOYEES SALARY SET SALARY=round(SALARY*1.2) WHERE DEPARTMENTS_ID=10");
-	  	        //UPDATE EMPLOYEES SALARY SET SALARY=round(SALARY*1.2) WHERE DEPARTMENT_ID=10 OR SALARY.DEPARTMENT_ID=60; CONSULTA ANIDADA
+	  	        //rest = stmt.executeQuery("select department_id from departments where department_name='administration');
+	  	        //rest = stmt.execute //Devuelve boolean
+	  	        
+	  	        rset2 = stmt.executeUpdate(Consultas.CONSULTA_SUBIDA_PORCENT);
+	  	     	ConsultaTablaSQL.ConsultaHistoricoSalario(conn);
 	  	       
-	  	        conn.setAutoCommit(false);//normalmente esta a true y se hace commit siempre al cerrar la conexion de la db, pero se puede poner a false
-		  	    //conn.commit();//para realizar el commit 
+	  	     	Savepoint=conn.setSavepoint();
+	  	       
 	  	        while (rset.next())
 				{
 	  	        	//salario1 = rset.getInt("SALARY");
 	  	        	//salario1 = (int) (salario1+(salario1*0.20));
-					empleado_id = rset.getInt("EMPLOYEE_ID");
-					 conn.setAutoCommit(false);//normalmente esta a true y se hace commit siempre al cerrar la conexion de la db, pero se puede poner a false
+					empleado_id = rset.getInt(2);
+					 salario1 = rset.getInt(3);
+					
+					conn.setAutoCommit(false);//normalmente esta a true y se hace commit siempre al cerrar la conexion de la db, pero se puede poner a false
 			  	     conn.commit();//para realizar el commit 
 				}
 	  	        System.out.println("El departamento Administración: "+empleado_id+" aumenta su salario a "+salario1);
@@ -51,6 +53,8 @@ public class ActualizarSalario {
 			catch(Exception e)
 			{ 
 				e.printStackTrace();
+				System.out.println("OCURRIO UN ERROR");
+				conn.rollback(Savepoint);
 			}
 			finally 
 			{
@@ -59,11 +63,5 @@ public class ActualizarSalario {
 				if (conn != null) 	{ try { conn.close(); } catch (Exception e3) { e3.printStackTrace(); }}
 			  	   
 			} 
-
 		}
-
 	}
-	
-	
-	
-

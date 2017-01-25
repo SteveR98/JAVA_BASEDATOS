@@ -1,4 +1,4 @@
-package edu.femxa.baseDatos;
+ package edu.femxa.baseDatos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,34 +8,25 @@ import java.sql.Statement;
 
 public class BaseDatosUpdate {
 	
-	
 	private static void liberarRecursos (Statement st, ResultSet rs)
 	{
-		
 		if (rs != null) 	{ try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); }}
 		if (st != null)	{ try {	st.close(); } catch (Exception e2) { e2.printStackTrace(); }}
-		
 	}
 	
-	
-	private static void liberarRecursos (Statement st, ResultSet rs, Connection conn)
+	private static void liberarRecursos (Statement st)
 	{
 		
-		if (rs != null) 	{ try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); }}
 		if (st != null)	{ try {	st.close(); } catch (Exception e2) { e2.printStackTrace(); }}
-		if (conn != null) 	{ try { conn.close(); } catch (Exception e3) { e3.printStackTrace(); }}
 	  	
-		
 	}
 	
 	private static void liberarRecursos (Connection conn)
 	{
 		
 		if (conn != null) 	{ try { conn.close(); } catch (Exception e3) { e3.printStackTrace(); }}
-	  	
 		
 	}
-	
 	private static void subeSueldo (Connection conn)
 	{
 		Statement st = null;
@@ -72,7 +63,6 @@ public class BaseDatosUpdate {
 			System.out.println("INICIO DE MOSTRAR");
 			System.out.println("----------------------");
 			
-			
 			while (rs.next())
 			    {
 					nombre = rs.getString(1);
@@ -93,9 +83,7 @@ public class BaseDatosUpdate {
 			liberarRecursos(st, rs);
 			
 		}
-			
 	}
-	
 	
 	public static void main(String[] args) throws SQLException {
 		
